@@ -1,6 +1,7 @@
 @import 'reset';
 
 $light-green: #10ad79;
+$light-gray: #e2e2e2;
 
 .container {
   display: flex;
@@ -8,7 +9,7 @@ $light-green: #10ad79;
 }
 
 aside {
-  margin: 40px;
+  margin: 80px;
   max-width: 300px;
   font-family: 'Noto Sans', sans-serif;
   line-height: 1.5;
@@ -39,31 +40,40 @@ aside {
 }
 
 .image-number {
+  margin: 5px 0;
   list-style: none;
-  font-size: 14px;
+  font-size: 12px;
+  color: #323232;
 
   li {
-    margin: 5px;
+    margin: 3px;
     display: inline-block;
-    border-radius: 3px;
-
-    &:hover {
-      background-color: gray;
-    }
+    text-align: center;
+    cursor: pointer;
   }
 
   input {
     visibility: hidden;
-    // width: 0;
-    // height: 0;
+    width: 0;
+    height: 0;
   }
 
   label {
+    padding: 1px 6px;
+    background-color: $light-gray;
     cursor: pointer;
+    border-radius: 3px;
+    transition: 120ms ease-in;
+    user-select: none;
+
+    &:hover {
+      background-color: darken($light-gray, 9%);
+    }
   }
 
   input:checked + label {
-    background: red;
+    background-color: darken($light-gray, 9%);
+    color: darken($light-green, 13%);
   }
 }
 
@@ -89,5 +99,23 @@ header {
 }
 
 article {
+  margin-top: 170px;
+  margin-left: 80px;
   width: 900px;
+
+  .plot-container {
+    position: relative;
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.tooltip-color {
+  position: absolute;
+  font-size: 14px;
+  pointer-events: none;
 }
