@@ -1,10 +1,93 @@
 @import 'reset';
 
-main {
+$light-green: #10ad79;
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+aside {
+  margin: 40px;
+  max-width: 300px;
+  font-family: 'Noto Sans', sans-serif;
+  line-height: 1.5;
+
+  .blurb {
+    font-size: 19px;
+
+    a {
+      color: $light-green;
+      text-decoration: none;
+      font-weight: 700;
+    }
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.025em;
+    color: #777;
+
+    em {
+      padding: 1px;
+      color: $light-green;
+      background-color: lighten($light-green, 55%);
+      font-style: normal;
+    }
+  }
+}
+
+.image-number {
+  list-style: none;
+  font-size: 14px;
+
+  li {
+    margin: 5px;
+    display: inline-block;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: gray;
+    }
+  }
+
+  input {
+    visibility: hidden;
+    // width: 0;
+    // height: 0;
+  }
+
+  label {
+    cursor: pointer;
+  }
+
+  input:checked + label {
+    background: red;
+  }
+}
+
+header {
+  margin: 40px 0;
+  font-size: 52px;
+  font-weight: 600;
+  font-family: 'EB Garamond', serif;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.87);
+  letter-spacing: -0.025em;
+  cursor: default;
+  user-select: none;
+}
+
+.image {
   margin: 50px auto;
   text-align: center;
 
   canvas {
     border-radius: 5px;
   }
+}
+
+article {
+  width: 900px;
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>kume</title>
+    <link rel="stylesheet" href="public/assets/styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond:600|Noto+Sans:400,700" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <aside>
+        <header class="title">
+          kume
+        </header>
+        <section class="blurb">
+          <!-- TODO: pudding inspo. i have some tabs open -->
+          <!-- TODO: Color quant -->
+          Visualizing dominant colors and image segmentation with<br /><a href="">k-means clustering</a>.
+        </section>
+        <h2>NUMBER OF CLUSTERS <em>k</em></h2>
+        <input type="number" value="3" />
+        <h2>ITERATION 0</h2>
+        <!-- TODO: restart button / instructions -->
+        <section class="image">
+          <ul class="image-number">
+            <!-- TODO: 10th option is "Upload" and clicking allows you to upload a photo. Must be scaled! -->
+          </ul>
+          <!-- TODO add 2 aurora seeds, 2 people seeds -->
+          <canvas id="canvas"></canvas>
+        </section>
+      </aside>
+      <article>
+        <!-- TODO: hover plot dom color makes the whole background a faint version of that color with fading transition -->
+        components:
+          canvas with pixels plotted
+          voronoi markers with d3-voronoi
+          big circle with current centroid color
+          transition between every iteration + update the iteration number that remains in index scope
+          hovering a centroid shows RGB, LAB, and HEX color data. And maybe some other stuff!
+      </article>
+      <!-- TODO: portfolio links -->
+    </div>
+    <script src="public/assets/js/bundle.js" charset="utf-8"></script>
+  </body>
+</html>
