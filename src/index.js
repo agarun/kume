@@ -4,6 +4,7 @@ import './scss/main.scss';
 // https://github.com/d3/d3-tile/issues/39
 import * as d3 from 'd3';
 import KMeans from './kmeans';
+import { drawPixels, drawInitialCentroids } from './util';
 
 // TODO: ES2017 version, need to integrate a transpiler
 // async function getCanvas() {
@@ -51,8 +52,10 @@ const loadImage = path => {
     canvasImageLab = getLabColors();
 
     const kmeans = new KMeans(canvasImageLab, 3);
-    setTimeout(() => kmeans.kMeansAlgorithm(), 3000);
-
+    drawPixels(canvasImageLab);
+    debugger
+    drawInitialCentroids(kmeans.centroids);
+    kmeans.kMeansAlgorithm();
   };
 };
 
@@ -94,6 +97,10 @@ for (var i = 1; i < 10; i++) {
     .append('label')
     .attr('for', `image-${i}`)
     .html(i);
+  // if (i === 10) {
+  //   input type=file, add a separate file handler... can I pass data URI in?
+  //   going to have to rescale / fit it to 300 somehow.
+  // }
 }
 
 const chooseImage = () => {
