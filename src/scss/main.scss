@@ -29,22 +29,28 @@ aside {
 
     input {
       margin: 0;
-      margin-left: 10px;
-      padding: 0;
-      display: inline-block;
-      max-width: 40px;
-      vertical-align: middle;
+      margin-left: 4px;
+      padding: 0 2px;
+      display: inline;
+      max-width: 45px;
+      height: 20px;
       white-space: normal;
       line-height: 1.5;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
-      color: #5e3737;
-      background: transparent;
+      color: darken($light-green, 20%);
+      background-color: lighten($light-green, 55%);
+      border-radius: 3px;
       border: 0;
 
       &:focus {
         outline: none;
+      }
+
+      &[type=number]::-webkit-inner-spin-button,
+      &[type=number]::-webkit-outer-spin-button {
+        opacity: 1;
       }
     }
 
@@ -56,7 +62,8 @@ aside {
       color: #777;
 
       em {
-        padding: 1px;
+        padding: 1px 2px;
+        margin-left: 10px;
         font-style: normal;
         color: $light-green;
         background-color: lighten($light-green, 55%);
@@ -65,12 +72,11 @@ aside {
     }
 
     #iteration-number {
-      padding-left: 10px;
       line-height: 1.5;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
-      color: #5e3737;
+      color: darken($light-green, 20%);
     }
   }
 }
@@ -153,10 +159,30 @@ article {
     }
 
     .color-tooltip {
+      // margin-left: 30px;
+      padding: 12px;
       position: absolute;
+      width: 80px;
       font-size: 14px;
       pointer-events: none;
       background-color: white;
+      z-index: 10;
+      border-radius: 3px;
+
+      &:after {
+        right: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: transparent;
+        border-right-color: white;
+        border-width: 8px;
+        margin-top: -8px;
+      }
     }
   }
 }
