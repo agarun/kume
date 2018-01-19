@@ -22,18 +22,23 @@ const convertRangeB = coord => (
   (((coord - LAB_B_MIN) * PLOT_CANVAS_RANGE) / LAB_B_RANGE)
 );
 
+// const testScaleX = d3.scaleLinear().domain([
+//   0,
+//   PLOT_CANVAS_RANGE
+// ]).range([0, PLOT_CANVAS_WIDTH]);
+//
+// const testScaleY = d3.scaleLinear().domain([
+//   0,
+//   PLOT_CANVAS_RANGE
+// ]).range([PLOT_CANVAS_HEIGHT, 0]);
+
 export const drawPixels = (labColors) => {
   plotCanvas.width = PLOT_CANVAS_WIDTH;
   plotCanvas.height = PLOT_CANVAS_HEIGHT;
 
   plotCtx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
-  // debugger
-
-  // FIXME: canvas top left is 0, 0 ...
   plotCtx.translate(0, plotCanvas.height);
   plotCtx.scale(1, -1);
-
-  // TODO: for loop with i += 10 && animating each point to the canvas ?
 
   // labColors.forEach((color) => {
   //   // x-axis a* (green-red)
@@ -86,7 +91,6 @@ export const drawPixels = (labColors) => {
   //   }
   // }
 
-
   // TODO use a d3.timer instead and interpolate the cluster from a nearby point?
   // https://bocoup.com/blog/smoothly-animate-thousands-of-points-with-html5-canvas-and-d3
   let i = 0;
@@ -101,14 +105,12 @@ export const drawPixels = (labColors) => {
       const y = convertRangeB(labColors[j].b);
       // L component is retained drawing the pixel
       plotCtx.fillStyle = labColors[j].toString();
-      // plotCtx.fillRect(x, y, 2, 2);
       plotCtx.beginPath();
       plotCtx.arc(x, y, 1.5, 0, 2 * Math.PI, true);
       plotCtx.fill();
       plotCtx.closePath();
     }
 
-    // i += 1;
     i += step;
     if (i < 90000) {
       requestAnimationFrame(drawPixel);
@@ -126,51 +128,74 @@ export const updateIterationNumber = () => {
 const plotD3 = d3.select('#d3-plot');
 plotD3.attr('width', PLOT_CANVAS_WIDTH);
 plotD3.attr('height', PLOT_CANVAS_HEIGHT);
-// plotD3.attr('transform', 'rotate(-90)');
+plotD3.attr('transform', 'rotate(-90)');
 
-// add tooltip div whose contents are redefined on mouseovers of colors
-const tooltipColor = (
-  plotD3
+const colorTooltip = (
+  d3.select('.plot-container')
     .append('div')
-    .attr('class', 'tooltip')
-    .style('opacity', 0)
+    .attr('class', 'color-tooltip')
 );
 
-// drawInitialCentroid to make it, drawCentroid will move it?
-// try to do this with data?
+const colorTooltipMouseover = (centroid) => {
+  d3.select(d3.event.target)
+    .attr('stroke', 'rgba(255, 255, 255, 0.6)')
+    .attr('stroke-width', 3);
 
-const tooltipColorMouseover = (data) => {
-  // TODO: color background function, which should
-  // mouseoff make it transparent or white again ?
-  // d3.select('body').style('background-color', centroid.toString());
+  d3.select('body')
+    .transition()
+    .duration(400)
+    .style(
+      'background-color',
+      `rgba${centroid.toString().slice(3, -1)}, 0.35)`
+    );
 
-  // deal with tooltip stuff, add text, etc.
-  // dont forget .data(data)
+  colorTooltip
+    .style('visibility', 'visible')
+    .style('left', d3.select(d3.event.target).attr('cy') + 'px')
+    .style('bottom', d3.select(d3.event.target).attr('cx') + 'px')
+    .text('yo');
 };
 
-const tooltipColorMouseout = (data) => {
+const colorTooltipMouseout = (centroid) => {
+  d3.select(d3.event.target)
+    .attr('stroke', 'white')
+    .attr('stroke-width', 2);
 
+  d3.select('body')
+    .transition()
+    .duration(200)
+    .style('background-color', 'transparent');
+
+  colorTooltip
+    .style('visibility', 'hidden');
 };
 
 export const drawInitialCentroids = (centroids) => {
+  // x-axis is a* and y-axis is b*
+  // (canvas was rotated -90deg to set origin to bottom-left)
   plotD3.selectAll('circle').remove();
-
-  centroids.forEach((centroid, i) => {
-    plotD3
-      .append('circle')
-      .attr('id', `centroid-${i}`)
-      .attr('r', 9)
-      .attr('cx', convertRangeA(centroid.a))
-      .attr('cy', convertRangeB(centroid.b))
-      .attr('stroke', 'white')
-      .attr('stroke-width', 2)
-      .attr('fill', centroid)
-      .on('mouseover', tooltipColorMouseover)
-      .on('mouseout', tooltipColorMouseout);
-  });
+  plotD3
+    .selectAll('circle')
+    .data(centroids)
+    .enter()
+    .append('circle')
+    .attr('r', 9)
+    .attr('cy', centroid => convertRangeA(centroid.a))
+    .attr('cx', centroid => convertRangeB(centroid.b))
+    .attr('stroke', 'white')
+    .attr('stroke-width', 2)
+    .attr('fill', centroid => centroid)
+    .on('mouseover', colorTooltipMouseover)
+    .on('mouseout', colorTooltipMouseout);
 };
 
-export const redrawCentroid = (centroid) => {
-  // select the cluster's centroid
-  // move it + interpolate
+export const redrawCentroids = (centroids) => {
+  plotD3
+    .selectAll('circle')
+    .data(centroids)
+    .transition()
+    .duration(1000)
+    .attr('cy', centroid => convertRangeA(centroid.a))
+    .attr('cx', centroid => convertRangeB(centroid.b))
+    .attr('fill', centroid => centroid);
 };
