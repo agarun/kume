@@ -85,16 +85,44 @@ aside {
       color: #10ad79;
       text-decoration: none;
       font-weight: 700; }
-  aside h2 {
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.025em;
-    color: #777; }
-    aside h2 em {
-      padding: 1px;
-      color: #10ad79;
-      background-color: #dafcf0;
-      font-style: normal; }
+  aside .counts {
+    margin: 20px 0; }
+    aside .counts input {
+      margin: 0;
+      margin-left: 10px;
+      padding: 0;
+      display: inline-block;
+      max-width: 40px;
+      vertical-align: middle;
+      white-space: normal;
+      line-height: 1.5;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      color: #5e3737;
+      background: transparent;
+      border: 0; }
+      aside .counts input:focus {
+        outline: none; }
+    aside .counts h2 {
+      display: inline;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.025em;
+      color: #777; }
+      aside .counts h2 em {
+        padding: 1px;
+        font-style: normal;
+        color: #10ad79;
+        background-color: #dafcf0;
+        border-radius: 3px; }
+    aside .counts #iteration-number {
+      padding-left: 10px;
+      line-height: 1.5;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      color: #5e3737; }
 
 .image-number {
   margin: 5px 0;
@@ -150,10 +178,12 @@ article {
       position: absolute;
       top: 0;
       left: 0; }
-
-.tooltip-color {
-  position: absolute;
-  font-size: 14px;
-  pointer-events: none; }
+      article .plot-container svg circle {
+        cursor: pointer; }
+    article .plot-container .color-tooltip {
+      position: absolute;
+      font-size: 14px;
+      pointer-events: none;
+      background-color: white; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhc3NldHMvc3R5bGVzL21haW4uY3NzIiwic291cmNlUm9vdCI6IiJ9*/
