@@ -32,7 +32,7 @@ const convertRangeB = coord => (
 //   PLOT_CANVAS_RANGE
 // ]).range([PLOT_CANVAS_HEIGHT, 0]);
 
-export const drawPixels = (labColors) => {
+export const drawPixels = (kMeans) => {
   plotCanvas.width = PLOT_CANVAS_WIDTH;
   plotCanvas.height = PLOT_CANVAS_HEIGHT;
 
@@ -40,65 +40,14 @@ export const drawPixels = (labColors) => {
   plotCtx.translate(0, plotCanvas.height);
   plotCtx.scale(1, -1);
 
-  // labColors.forEach((color) => {
-  //   // x-axis a* (green-red)
-  //   const x = convertRangeA(color.a);
-  //   // y-axis b* (blue-yellow)
-  //   const y = convertRangeB(color.b);
-  //   // L component is retained drawing the pixel
-  //   plotCtx.fillStyle = color.toString();
-  //   // plotCtx.fillRect(x, y, 2, 2);
-  //   plotCtx.beginPath();
-  //   plotCtx.arc(x, y, 1, 0,  2 * Math.PI, true);
-  //   plotCtx.fill();
-  //   plotCtx.closePath();
-  // });
-
-  // console.log(labColors.length);
-  // // http://bl.ocks.org/biovisualize/5400576 TODO
-  // for (var i = 0; i < labColors.length; i += 1) {
-  //   // x-axis a* (green-red)
-  //   const x = convertRangeA(labColors[i].a);
-  //   // y-axis b* (blue-yellow)
-  //   const y = convertRangeB(labColors[i].b);
-  //   // L component is retained drawing the pixel
-  //   plotCtx.fillStyle = labColors[i].toString();
-  //   // plotCtx.fillRect(x, y, 2, 2);
-  //   plotCtx.beginPath();
-  //   plotCtx.arc(x, y, 1.5, 0, 2 * Math.PI, true);
-  //   plotCtx.fill();
-  //   plotCtx.closePath();
-  // }
-
-  // const drawPixel = (color) => {
-  //   // x-axis a* (green-red)
-  //   const x = convertRangeA(color.a);
-  //   // y-axis b* (blue-yellow)
-  //   const y = convertRangeB(color.b);
-  //   // L component is retained drawing the pixel
-  //   plotCtx.fillStyle = color.toString();
-  //   // plotCtx.fillRect(x, y, 2, 2);
-  //   plotCtx.beginPath();
-  //   plotCtx.arc(x, y, 1.5, 0, 2 * Math.PI, true);
-  //   plotCtx.fill();
-  //   plotCtx.closePath();
-  // };
-  //
-  // // const animate = () => {}
-  // for (var i = 0; i < labColors.length; i++) {
-  //   if (i < 90000) {
-  //     requestAnimationFrame(drawPixel.bind(null, labColors[i]));
-  //   }
-  // }
-
   // TODO use a d3.timer instead and interpolate the cluster from a nearby point?
   // https://bocoup.com/blog/smoothly-animate-thousands-of-points-with-html5-canvas-and-d3
   let i = 0;
-  const step = 1000;
+  const step = 600;
+  const { labColors } = kMeans;
 
   const drawPixel = () => {
     for (let j = i; j < i + step; j++) {
-      if (labColors[j] === undefined) console.log(i);
       // x-axis a* (green-red)
       const x = convertRangeA(labColors[j].a);
       // y-axis b* (blue-yellow)
@@ -114,6 +63,13 @@ export const drawPixels = (labColors) => {
     i += step;
     if (i < 90000) {
       requestAnimationFrame(drawPixel);
+    } else {
+      setTimeout(() => {
+        drawInitialCentroids(kMeans.centroids);
+      }, 750);
+      setTimeout(() => {
+        kMeans.kMeansAlgorithm();
+      }, 750);
     }
   };
 
@@ -129,6 +85,10 @@ const plotD3 = d3.select('#d3-plot');
 plotD3.attr('width', PLOT_CANVAS_WIDTH);
 plotD3.attr('height', PLOT_CANVAS_HEIGHT);
 plotD3.attr('transform', 'rotate(-90)');
+
+const convertRgbToHex = () => {
+
+};
 
 const colorTooltip = (
   d3.select('.plot-container')
@@ -153,7 +113,10 @@ const colorTooltipMouseover = (centroid) => {
     .style('visibility', 'visible')
     .style('left', d3.select(d3.event.target).attr('cy') + 'px')
     .style('bottom', d3.select(d3.event.target).attr('cx') + 'px')
-    .text('yo');
+    .style('box-shadow', '0 1px 4px 0 rgba(12, 12, 13, 0.1)')
+    .text(centroid.toString());
+    // how many items in this cluster?
+    // hex color?
 };
 
 const colorTooltipMouseout = (centroid) => {
@@ -167,19 +130,32 @@ const colorTooltipMouseout = (centroid) => {
     .style('background-color', 'transparent');
 
   colorTooltip
+    .style('box-shadow', 'none')
     .style('visibility', 'hidden');
+};
+
+export const clearD3PlotCentroids = () => {
+  window.plotD3 = plotD3;
+  debugger
+  plotD3
+    .selectAll('circle')
+    .transition()
+    .duration(500)
+    .attr('r', 0)
+    .remove();
+  debugger
+  // test without the transition?
 };
 
 export const drawInitialCentroids = (centroids) => {
   // x-axis is a* and y-axis is b*
   // (canvas was rotated -90deg to set origin to bottom-left)
-  plotD3.selectAll('circle').remove();
-  plotD3
+  const circles = plotD3
     .selectAll('circle')
     .data(centroids)
     .enter()
     .append('circle')
-    .attr('r', 9)
+    .attr('r', 0)
     .attr('cy', centroid => convertRangeA(centroid.a))
     .attr('cx', centroid => convertRangeB(centroid.b))
     .attr('stroke', 'white')
@@ -187,6 +163,12 @@ export const drawInitialCentroids = (centroids) => {
     .attr('fill', centroid => centroid)
     .on('mouseover', colorTooltipMouseover)
     .on('mouseout', colorTooltipMouseout);
+
+  circles
+    .transition()
+    .duration(2000)
+    .ease(d3.easeBounce)
+    .attr('r', 9);
 };
 
 export const redrawCentroids = (centroids) => {

@@ -4,35 +4,19 @@ import './scss/main.scss';
 // https://github.com/d3/d3-tile/issues/39
 import * as d3 from 'd3';
 import KMeans from './kmeans';
-import { drawPixels, drawInitialCentroids } from './util';
-
-// TODO: ES2017 version, need to integrate a transpiler
-// async function getCanvas() {
-//   const ctx = document.getElementById('canvas').getContext('2d');
-//
-//   let img = await loadImage('../assets/images/demos/1.jpg');
-//   ctx.drawImage(img, 0, 0);
-// }
-//
-// function loadImage(path) {
-//   return new Promise(
-//     resolve => {
-//       let img = new Image();
-//       img.onload = () => resolve(i);
-//       img.src = path;
-//     }
-//   )
-// }
-
-// TODO: image uploads via
-// https://stackoverflow.com/questions/10906734/how-to-upload-image-into-html5-canvas
+import { drawPixels, clearD3PlotCentroids } from './util';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+// TODO: update k on change of input's value.
+// TODO: latch onto kmeans timer as a global var so we can clear if necessary?
+let k = parseInt(d3.select('#k').attr('value'));
+
 let canvasImageData;
 let canvasImageRgb;
 let canvasImageLab;
+let kMeansAlgorithmTimer;
 
 const loadImage = path => {
   const img = new Image();
@@ -51,11 +35,13 @@ const loadImage = path => {
     canvasImageRgb = getRgbColors();
     canvasImageLab = getLabColors();
 
-    const kmeans = new KMeans(canvasImageLab, 3);
-    drawPixels(canvasImageLab);
-    debugger
-    drawInitialCentroids(kmeans.centroids);
-    kmeans.kMeansAlgorithm();
+    clearInterval(kMeansAlgorithmTimer);
+    // debugger
+    clearD3PlotCentroids();
+    setTimeout(() => {
+      const kMeans = new KMeans(canvasImageLab, k);
+      kMeansAlgorithmTimer = drawPixels(kMeans);
+    }, 500);
   };
 };
 
