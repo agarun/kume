@@ -89,21 +89,27 @@ aside {
     margin: 20px 0; }
     aside .counts input {
       margin: 0;
-      margin-left: 10px;
-      padding: 0;
-      display: inline-block;
-      max-width: 40px;
-      vertical-align: middle;
+      margin-left: 4px;
+      padding: 0 2px;
+      display: inline;
+      max-width: 45px;
+      height: 19.5px;
       white-space: normal;
       line-height: 1.5;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
-      color: #5e3737;
-      background: transparent;
-      border: 0; }
+      color: #075038;
+      background-color: #dafcf0;
+      border-radius: 3px;
+      border: 0;
+      transition: 150ms ease-in; }
+      aside .counts input:hover {
+        background-color: #c3f9e7; }
       aside .counts input:focus {
         outline: none; }
+      aside .counts input[type=number]::-webkit-inner-spin-button, aside .counts input[type=number]::-webkit-outer-spin-button {
+        opacity: 1; }
     aside .counts h2 {
       display: inline;
       font-weight: 700;
@@ -111,18 +117,41 @@ aside {
       letter-spacing: 0.025em;
       color: #777; }
       aside .counts h2 em {
-        padding: 1px;
+        padding: 1px 2px;
+        margin-left: 10px;
         font-style: normal;
         color: #10ad79;
         background-color: #dafcf0;
         border-radius: 3px; }
     aside .counts #iteration-number {
-      padding-left: 10px;
       line-height: 1.5;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
-      color: #5e3737; }
+      color: #075038; }
+    aside .counts .restart-iteration {
+      margin-top: -1px;
+      margin-left: 10px;
+      padding: 0px 6px;
+      height: 19.5px;
+      white-space: normal;
+      line-height: 1.5;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      text-transform: uppercase;
+      vertical-align: middle;
+      color: #075038;
+      background-color: #dafcf0;
+      transition: 150ms ease-in;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      border-radius: 3px; }
+      aside .counts .restart-iteration:focus {
+        outline: none; }
+      aside .counts .restart-iteration:hover {
+        background-color: #c3f9e7; }
 
 .image-number {
   margin: 5px 0;
@@ -170,7 +199,7 @@ header {
 
 article {
   margin-top: 170px;
-  margin-left: 80px;
+  margin-left: 20px;
   width: 900px; }
   article .plot-container {
     position: relative; }
@@ -181,9 +210,53 @@ article {
       article .plot-container svg circle {
         cursor: pointer; }
     article .plot-container .color-tooltip {
+      margin-left: 22px;
+      padding: 5px 10px;
       position: absolute;
-      font-size: 14px;
-      pointer-events: none;
-      background-color: white; }
+      max-width: 130px;
+      height: 62px;
+      background-color: white;
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 12px;
+      color: #525252;
+      z-index: 10;
+      border-radius: 3px; }
+      article .plot-container .color-tooltip h2 {
+        margin: 2px 0;
+        padding: 1px 3px;
+        display: inline;
+        font-size: 13px;
+        text-shadow: 0px 1px 1px #4e4e4e;
+        color: white; }
+      article .plot-container .color-tooltip h3 {
+        font-weight: bold;
+        font-size: 11px;
+        color: #6c6c6c;
+        letter-spacing: 0.015em; }
+      article .plot-container .color-tooltip:after {
+        padding-left: 22px;
+        right: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: transparent;
+        border-right-color: white;
+        border-width: 8px;
+        margin-top: -8px; }
+
+.links {
+  display: flex;
+  justify-content: center; }
+  .links svg {
+    margin: 5px;
+    fill: #afc2bf;
+    transition: 150ms ease-in;
+    cursor: pointer; }
+    .links svg:hover {
+      fill: #b4e4dd; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhc3NldHMvc3R5bGVzL21haW4uY3NzIiwic291cmNlUm9vdCI6IiJ9*/

@@ -29,11 +29,28 @@ const loadImage = path => {
   img.onload = () => {
     canvas.width = img.width;
     canvas.height = img.height;
+    newCanvasImage(img);
+  };
+};
+
+const newCanvasImage = (img) => {
+  let opacity = 0;
+
+  const fadeInImage = () => {
+    ctx.globalAlpha = opacity;
     ctx.drawImage(img, 0, 0);
 
-    parseCanvasImage();
-    runKMeans();
+    if (opacity < 1) {
+      opacity += 0.03;
+      requestAnimationFrame(fadeInImage);
+    } else {
+      ctx.drawImage(img, 0, 0);
+      parseCanvasImage();
+      runKMeans();
+    }
   };
+
+  fadeInImage();
 };
 
 const cancelKMeans = () => {
@@ -95,12 +112,19 @@ for (var i = 1; i < 10; i++) {
     .html(i);
 }
 
+let lastChosenImageValue;
 const chooseImage = () => {
-  loadImage(`public/assets/images/demos/${d3.event.target.value}.jpg`);
+  lastChosenImageValue = d3.event.target.value;
+  loadImage(`public/assets/images/demos/${lastChosenImageValue}.jpg`);
 };
 
 d3.selectAll('input[name=image-number]')
   .on('change', chooseImage);
+
+d3.select('.restart-iteration')
+  .on('click', () => {
+    loadImage(`public/assets/images/demos/${lastChosenImageValue}.jpg`);
+  });
 
 const parseCanvasImage = () => {
   canvasImageData = getImageData();
@@ -114,3 +138,8 @@ const runKMeans = () => {
   clearD3PlotCentroids();
   setTimeout(startNewKMeansRun, 500);
 };
+
+setTimeout(() => {
+  lastChosenImageValue = 1;
+  loadImage(`public/assets/images/demos/1.jpg`);
+}, 1000);

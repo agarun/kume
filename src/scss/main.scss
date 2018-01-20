@@ -1,6 +1,8 @@
 @import 'reset';
 
 $light-green: #10ad79;
+$lighter-green: lighten($light-green, 55%);
+$dark-green: darken($light-green, 20%);
 $light-gray: #e2e2e2;
 
 .container {
@@ -33,16 +35,21 @@ aside {
       padding: 0 2px;
       display: inline;
       max-width: 45px;
-      height: 20px;
+      height: 19.5px;
       white-space: normal;
       line-height: 1.5;
       font-size: 13px;
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
-      color: darken($light-green, 20%);
-      background-color: lighten($light-green, 55%);
+      color: $dark-green;
+      background-color: $lighter-green;
       border-radius: 3px;
       border: 0;
+      transition: 150ms ease-in;
+
+      &:hover {
+        background-color: lighten($light-green, 50%);
+      }
 
       &:focus {
         outline: none;
@@ -66,7 +73,7 @@ aside {
         margin-left: 10px;
         font-style: normal;
         color: $light-green;
-        background-color: lighten($light-green, 55%);
+        background-color: $lighter-green;
         border-radius: 3px;
       }
     }
@@ -77,6 +84,35 @@ aside {
       font-weight: 700;
       font-family: 'Noto Sans', sans-serif;
       color: darken($light-green, 20%);
+    }
+
+    .restart-iteration {
+      margin-top: -1px;
+      margin-left: 10px;
+      padding: 0px 6px;
+      height: 19.5px;
+      white-space: normal;
+      line-height: 1.5;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Noto Sans', sans-serif;
+      text-transform: uppercase;
+      vertical-align: middle;
+      color: $dark-green;
+      background-color: $lighter-green;
+      transition: 150ms ease-in;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      border-radius: 3px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        background-color: lighten($light-green, 50%);
+      }
     }
   }
 }
@@ -160,16 +196,32 @@ article {
 
     .color-tooltip {
       margin-left: 22px;
-      padding: 12px;
+      padding: 5px 10px;
       position: absolute;
-      width: 140px;
-      height: 70px;
-      font-size: 12px;
-      pointer-events: auto;
+      max-width: 130px;
+      height: 62px;
       background-color: white;
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 12px;
+      color: #525252;
       z-index: 10;
       border-radius: 3px;
-      font-family: 'Noto Sans', sans-serif;
+
+      h2 {
+        margin: 2px 0;
+        padding: 1px 3px;
+        display: inline;
+        font-size: 13px;
+        text-shadow: 0px 1px 1px #4e4e4e;
+        color: white;
+      }
+
+      h3 {
+        font-weight: bold;
+        font-size: 11px;
+        color: #6c6c6c;
+        letter-spacing: 0.015em;
+      }
 
       &:after {
         padding-left: 22px;
@@ -186,6 +238,22 @@ article {
         border-width: 8px;
         margin-top: -8px;
       }
+    }
+  }
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+
+  svg {
+    margin: 5px;
+    fill: #afc2bf;
+    transition: 150ms ease-in;
+    cursor: pointer;
+
+    &:hover {
+      fill: #b4e4dd;
     }
   }
 }
