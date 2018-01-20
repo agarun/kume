@@ -1,4 +1,4 @@
-# kume
+# [kume](https://agarun.com/kume)
 
 [kume](https://agarun.com/kume) is a visualization of image segmentation and color quantization using [k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering)
 
@@ -20,7 +20,9 @@ The [CIE L\*a\*b\*](https://en.wikipedia.org/wiki/Lab_color_space) color space d
 
 Choose a value of *k* and a sample image. Image pixels are plotted to an HTML5 Canvas. The visual 2D representation shows the colors in the sRGB gamut (x-axis *a*\*, y-axis *b*\*) and has some pixel overlap since it omits a separate component for *L*\*.
 
-*k* colors are initialized as centroids. Each centroid is represented by its mean color for the cluster with an SVG & tooltip. Clusters and centroids are repeatedly assigned and updated until convergence. D3 handles animating each iteration.
+*k* colors are initialized as centroids. Each centroid is represented by its mean color for the cluster with an SVG & tooltip. Hover over a centroid to see information about the color.
+
+Clusters and centroids are repeatedly assigned and updated until convergence. D3 handles animating each iteration.
 
 When there are no more new centroid assignments, the cluster data is used to draw a quantized version of the sample image using only *k* prominent colors.
 
@@ -35,7 +37,7 @@ When there are no more new centroid assignments, the cluster data is used to dra
 * Interpolating pixels from the image - [Inspiration](https://github.com/anvaka/gauss-distribution)
 * Chromaticity diagram with a fixed illuminant for a truer representation
 * 3D Plotting color space components - [Inspiration](https://mollermara.com/blog/kmeans/)
-* Better-performing initialization methods
+* Better-performing initialization methods for more consistent results
   * e.g. [k-means++](https://en.wikipedia.org/wiki/K-means%2B%2B)
 
 ## References
