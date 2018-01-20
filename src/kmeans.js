@@ -4,7 +4,7 @@ import * as d3Timer from 'd3-timer';
 import {
   updateIterationNumber,
   redrawCentroids,
-  // redrawClusters,
+  // redrawClusters, // TODO: voronoi
   clearD3PlotCentroids,
 } from './util';
 
@@ -79,7 +79,7 @@ class KMeans {
 
       if (elapsed > 22 * 750) {
         this.runningKMeans.stop();
-        this.runningKMeans = d3Timer.interval(this.kMeansRun, 150);
+        this.runningKMeans = d3Timer.interval(this.kMeansRun, 200);
       }
     }, 750);
   }

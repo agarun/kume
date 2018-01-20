@@ -142,4 +142,6 @@ const runKMeans = () => {
 setTimeout(() => {
   lastChosenImageValue = 1;
   loadImage(`public/assets/images/demos/1.jpg`);
+  d3.select('input[name=image-number]:first-of-type')
+    .attr('checked', true);
 }, 1000);
