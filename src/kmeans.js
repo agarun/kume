@@ -6,16 +6,17 @@ import {
   redrawCentroids,
   // redrawClusters,
   clearD3PlotCentroids,
-  drawQuantizedImage,
 } from './util';
+
+import { drawQuantizedImage } from './quantize';
 
 // First, randomly choose k initial centroids using Forgy initialization
 // Calculate the color distance between each color & each cluster's centroid
 // Assign each CIELAB color to the cluster with the minimized color difference
 // Update & recompute each cluster's centroid
-// If the centroids are equivalent, k-menas converges & iterations are complete.
-// If not, repeatedly alternate between assigning colors & updating centroids
-// until convergence.
+// If the centroids are equivalent, k-menas converges & iterations are complete
+// If not, repeatedly alternate between assigning colors
+// & updating centroids until convergence
 
 class KMeans {
   // color distance is determined by calculating Euclidean distance
@@ -38,6 +39,7 @@ class KMeans {
     this.centroids = this.initialCentroids();
     this.convergence = false;
     this.runningKMeans = null;
+    this.kMeansRun = this.kMeansRun.bind(this);
   }
 
   // Initialization with the Forgy method. k observations are
@@ -57,30 +59,35 @@ class KMeans {
   // alternate between assigning data points to clusters &
   // updating cluster centroids until convergence.
   // convergence occurs when centroid assignments are equivalent
-  kMeansAlgorithm() {
-    // debugger
-    if (this.cancelKMeans) {
-      clearD3PlotCentroids();
-      return;
-    }
+  kMeansRun() {
+    updateIterationNumber();
 
-    this.runningKMeans = d3Timer.interval(() => {
-      updateIterationNumber();
-      this.clusters = this.calculateClusters();
-      this.centroids = this.recomputeCentroids();
-      if (this.convergence) {
+    this.clusters = this.calculateClusters();
+    this.centroids = this.recomputeCentroids();
+
+    if (this.convergence) {
+      this.runningKMeans.stop();
+      drawQuantizedImage(this.clusters, this.centroids);
+    }
+  }
+
+  kMeansAlgorithm() {
+    if (this.cancelKMeans) return clearD3PlotCentroids();
+
+    this.runningKMeans = d3Timer.interval((elapsed) => {
+      this.kMeansRun();
+
+      if (elapsed > 22 * 750) {
         this.runningKMeans.stop();
-        drawQuantizedImage(this.clusters, this.centroids);
+        this.runningKMeans = d3Timer.interval(this.kMeansRun, 150);
       }
-      // if passing 20 iter, this.runningKMeans.restart(cb, ...) so it goes faster!
-    }, 800);
+    }, 750);
   }
 
   // Assign each color to the cluster centroid it's closest to based
   // on the Delta E*ab CIE76 distance metric.
   // The metric will compare each data point to the centroids according to
   // the lowest Euclidean distance (color difference in CIELAB space)
-  // TODO: The Voronoi diagram will come from here -> "the means generate a Voronoi diagram"
   calculateClusters() {
     let newClusters = Array.apply(null, Array(this.k)).map(() => []);
 
@@ -121,7 +128,6 @@ class KMeans {
     return d3Color.lab(...newCentroid);
   }
 
-  // TODO: less sig figs?
   isEqual(array1, array2) {
     return JSON.stringify(array1) === JSON.stringify(array2);
   }

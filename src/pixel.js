@@ -34,7 +34,9 @@ class Pixel {
   }
 
   drawPixel() {
-    if (this.cancelAnimation) return;
+    if (this.cancelAnimation) {
+      return cancelAnimationFrame(this.drawPixelTimer);
+    }
 
     const step = this.step;
     const ctx = this.ctx;
@@ -69,5 +71,3 @@ class Pixel {
 }
 
 export default Pixel;
-// TODO: use a d3.timer instead and interpolate the cluster from a nearby point?
-// https://bocoup.com/blog/smoothly-animate-thousands-of-points-with-html5-canvas-and-d3
