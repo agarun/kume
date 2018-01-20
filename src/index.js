@@ -11,12 +11,22 @@ const ctx = canvas.getContext('2d');
 
 // TODO: update k on change of input's value.
 // TODO: latch onto kmeans timer as a global var so we can clear if necessary?
-let k = parseInt(d3.select('#k').attr('value'));
+// let k = parseInt(d3.select('#k').attr('value'));
 
 let canvasImageData;
 let canvasImageRgb;
 let canvasImageLab;
-let kMeansAlgorithmTimer;
+
+let kMeans;
+let drawPixelsTimer;
+
+// TODO: refactor into image.js
+
+const inputK = d3.select('#k');
+let k = parseInt(inputK.attr('value'));
+inputK.on('change', () => {
+  k = parseInt(d3.event.target.value);
+});
 
 const loadImage = path => {
   const img = new Image();
@@ -35,12 +45,14 @@ const loadImage = path => {
     canvasImageRgb = getRgbColors();
     canvasImageLab = getLabColors();
 
-    clearInterval(kMeansAlgorithmTimer);
+    if (kMeans && kMeans.runningKMeans) kMeans.runningKMeans.stop();
+    if (drawPixelsTimer)  (drawPixelsTimer);
     // debugger
     clearD3PlotCentroids();
+
     setTimeout(() => {
-      const kMeans = new KMeans(canvasImageLab, k);
-      kMeansAlgorithmTimer = drawPixels(kMeans);
+      kMeans = new KMeans(canvasImageLab, k);
+      drawPixelsTimer = drawPixels(kMeans);
     }, 500);
   };
 };
@@ -64,9 +76,11 @@ const getRgbColors = () => {
 };
 
 const getLabColors = () => (
-  canvasImageRgb.map(rgbColor => (
-    d3.lab(rgbColor)
-  ))
+  canvasImageRgb.map((rgbColor, i) => {
+    const labColor = d3.lab(rgbColor);
+    labColor.pixelPosition = i;
+    return labColor;
+  })
 );
 
 for (var i = 1; i < 10; i++) {
