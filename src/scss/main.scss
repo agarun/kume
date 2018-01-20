@@ -11,7 +11,7 @@ $light-gray: #e2e2e2;
 }
 
 aside {
-  margin: 80px;
+  margin: 60px 80px;
   max-width: 300px;
   font-family: 'Noto Sans', sans-serif;
   line-height: 1.5;
@@ -88,7 +88,6 @@ aside {
 
     .restart-iteration {
       margin-top: -1px;
-      margin-left: 10px;
       padding: 0px 6px;
       height: 19.5px;
       white-space: normal;
@@ -127,7 +126,14 @@ aside {
     margin: 3px;
     display: inline-block;
     text-align: center;
-    cursor: pointer;
+
+    &:first-of-type label {
+      cursor: default;
+
+      &:hover {
+        background-color: $light-gray;
+      }
+    }
   }
 
   input {
@@ -156,7 +162,7 @@ aside {
 }
 
 header {
-  margin: 40px 0;
+  margin: 30px 0;
   font-size: 52px;
   font-weight: 600;
   font-family: 'EB Garamond', serif;
@@ -168,7 +174,7 @@ header {
 }
 
 .image {
-  margin: 50px auto;
+  margin: 40px auto;
   text-align: center;
 
   canvas {
@@ -245,15 +251,32 @@ article {
 .links {
   display: flex;
   justify-content: center;
+  flex-flow: column nowrap;
+  font-family: 'EB Garamond', serif;
+  color: #333;
+  font-size: 16px;
 
-  svg {
-    margin: 5px;
-    fill: #afc2bf;
-    transition: 150ms ease-in;
-    cursor: pointer;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+
+  p {
+    width: 400px;
+    font-weight: 500;
+
+    em {
+      font-weight: 700;
+    }
+  }
+
+  a {
+    margin-top: -10px;
+    text-decoration: none;
+    color: $light-green;
+    font-weight: 700;
 
     &:hover {
-      fill: #b4e4dd;
+      color: $dark-green;
+      text-decoration: underline;
     }
   }
 }

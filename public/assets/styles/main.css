@@ -75,7 +75,7 @@ th {
   justify-content: center; }
 
 aside {
-  margin: 80px;
+  margin: 60px 80px;
   max-width: 300px;
   font-family: 'Noto Sans', sans-serif;
   line-height: 1.5; }
@@ -131,7 +131,6 @@ aside {
       color: #075038; }
     aside .counts .restart-iteration {
       margin-top: -1px;
-      margin-left: 10px;
       padding: 0px 6px;
       height: 19.5px;
       white-space: normal;
@@ -161,8 +160,11 @@ aside {
   .image-number li {
     margin: 3px;
     display: inline-block;
-    text-align: center;
-    cursor: pointer; }
+    text-align: center; }
+    .image-number li:first-of-type label {
+      cursor: default; }
+      .image-number li:first-of-type label:hover {
+        background-color: #e2e2e2; }
   .image-number input {
     visibility: hidden;
     width: 0;
@@ -181,7 +183,7 @@ aside {
     color: #0a704f; }
 
 header {
-  margin: 40px 0;
+  margin: 30px 0;
   font-size: 52px;
   font-weight: 600;
   font-family: 'EB Garamond', serif;
@@ -192,7 +194,7 @@ header {
   user-select: none; }
 
 .image {
-  margin: 50px auto;
+  margin: 40px auto;
   text-align: center; }
   .image canvas {
     border-radius: 5px; }
@@ -250,13 +252,25 @@ article {
 
 .links {
   display: flex;
-  justify-content: center; }
-  .links svg {
-    margin: 5px;
-    fill: #afc2bf;
-    transition: 150ms ease-in;
-    cursor: pointer; }
-    .links svg:hover {
-      fill: #b4e4dd; }
+  justify-content: center;
+  flex-flow: column nowrap;
+  font-family: 'EB Garamond', serif;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.01em; }
+  .links p {
+    width: 400px;
+    font-weight: 500; }
+    .links p em {
+      font-weight: 700; }
+  .links a {
+    margin-top: -10px;
+    text-decoration: none;
+    color: #10ad79;
+    font-weight: 700; }
+    .links a:hover {
+      color: #075038;
+      text-decoration: underline; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhc3NldHMvc3R5bGVzL21haW4uY3NzIiwic291cmNlUm9vdCI6IiJ9*/
