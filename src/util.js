@@ -1,120 +1,28 @@
 import * as d3 from 'd3';
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const plotCanvas = document.getElementById('plot');
-const plotCtx = plotCanvas.getContext('2d');
+export const PLOT_CANVAS_WIDTH = 600;
+export const PLOT_CANVAS_HEIGHT = 600;
+export const PLOT_CANVAS_RANGE = 600;
 
-const PLOT_CANVAS_WIDTH = 600;
-const PLOT_CANVAS_HEIGHT = 600;
-
-const PLOT_CANVAS_RANGE = 600;
-
+// Reference for CIELAB bounds:
 // https://stackoverflow.com/questions/19099063/what-are-the-ranges-of-coordinates-in-the-cielab-color-space
 const LAB_A_MIN = -87;
 const LAB_A_RANGE = 185;
 const LAB_B_MIN = -108;
 const LAB_B_RANGE = 203;
 
-const convertRangeA = coord => (
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const plotCanvas = document.getElementById('plot');
+const plotCtx = plotCanvas.getContext('2d');
+
+export const convertRangeA = coord => (
   (((coord - LAB_A_MIN) * PLOT_CANVAS_RANGE) / LAB_A_RANGE)
 );
 
-const convertRangeB = coord => (
+export const convertRangeB = coord => (
   (((coord - LAB_B_MIN) * PLOT_CANVAS_RANGE) / LAB_B_RANGE)
 );
-
-// const testScaleX = d3.scaleLinear().domain([
-//   0,
-//   PLOT_CANVAS_RANGE
-// ]).range([0, PLOT_CANVAS_WIDTH]);
-//
-// const testScaleY = d3.scaleLinear().domain([
-//   0,
-//   PLOT_CANVAS_RANGE
-// ]).range([PLOT_CANVAS_HEIGHT, 0]);
-
-// import { PLOT_CANVAS_WIDTH, PLOT_CANVAS_HEIGHT } from './util';
-
-// class Pixel {
-//   constructor() {
-//     this.step = 600;
-//     this.drawPixelTimer = null;
-//   }
-//
-//   drawPixel() {
-//     const step = this.step;
-//     for (let j = i; j < i + step; j++) {
-//       // x-axis a* (green-red)
-//       const x = convertRangeA(labColors[j].a);
-//       // y-axis b* (blue-yellow)
-//       const y = convertRangeB(labColors[j].b);
-//       // L component is retained drawing the pixel
-//       plotCtx.fillStyle = labColors[j].toString();
-//       plotCtx.beginPath();
-//       plotCtx.arc(x, y, 1.5, 0, 2 * Math.PI, true);
-//       plotCtx.fill();
-//       plotCtx.closePath();
-//     }
-//
-//     i += step;
-//     if (i < 90000) {
-//       drawPixelTimer = requestAnimationFrame(drawPixel);
-//       // console.log(x);
-//     } else {
-//       setTimeout(() => drawInitialCentroids(kMeans.centroids), 750);
-//       setTimeout(() => kMeans.kMeansAlgorithm(), 750);
-//     }
-//   }
-//
-//   drawPixels() {
-//
-//   }
-// }
-
-export const drawPixels = (kMeans) => {
-  plotCanvas.width = PLOT_CANVAS_WIDTH;
-  plotCanvas.height = PLOT_CANVAS_HEIGHT;
-
-  plotCtx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
-  plotCtx.translate(0, plotCanvas.height);
-  plotCtx.scale(1, -1);
-
-  // TODO use a d3.timer instead and interpolate the cluster from a nearby point?
-  // https://bocoup.com/blog/smoothly-animate-thousands-of-points-with-html5-canvas-and-d3
-  let i = 0;
-  const step = 600;
-  const { labColors } = kMeans;
-
-  let drawPixelTimer;
-  const drawPixel = () => {
-    for (let j = i; j < i + step; j++) {
-      // x-axis a* (green-red)
-      const x = convertRangeA(labColors[j].a);
-      // y-axis b* (blue-yellow)
-      const y = convertRangeB(labColors[j].b);
-      // L component is retained drawing the pixel
-      plotCtx.fillStyle = labColors[j].toString();
-      plotCtx.beginPath();
-      plotCtx.arc(x, y, 1.5, 0, 2 * Math.PI, true);
-      plotCtx.fill();
-      plotCtx.closePath();
-    }
-
-    i += step;
-    if (i < 90000) {
-      requestAnimationFrame(drawPixel);
-      // drawPixelTimer = requestAnimationFrame(drawPixel);
-      // console.log(x);
-    } else {
-      setTimeout(() => drawInitialCentroids(kMeans.centroids), 750);
-      setTimeout(() => kMeans.kMeansAlgorithm(), 750);
-    }
-  };
-
-  // return drawPixelTimer;
-  return requestAnimationFrame(drawPixel);
-};
 
 export const updateIterationNumber = () => {
   const iterationCount = d3.select('#iteration-number');
@@ -175,13 +83,10 @@ const colorTooltipMouseover = (centroid) => {
       colorTooltip
         .style('visibility', 'hidden');
     });
-    // how many items in this cluster?
-    // hex color?
-
+    // TODO how many items in this cluster? should show on hover
     // TODO current issues:
     //   hovering over tooltips quickly is a bug bc no tooltip... bc of how i did it
     //   keep bg color while looking at tooltip
-    //   cant cancel a building requestAnimationFrame...
 };
 
 const colorTooltipMouseout = (centroid) => {
@@ -203,20 +108,16 @@ const colorTooltipMouseout = (centroid) => {
 
 export const clearD3PlotCentroids = () => {
   d3.select('#iteration-number').text('0');
-
-  window.plotD3 = plotD3;
-  // debugger
   plotD3
     .selectAll('circle')
     .transition()
     .duration(500)
     .attr('r', 0)
     .remove();
-  // debugger
 };
 
 export const drawInitialCentroids = (centroids) => {
-  // x-axis is a* and y-axis is b*
+  // x-axis is a*, y-axis is b*
   // (canvas was rotated -90deg to set origin to bottom-left)
   const circles = plotD3
     .selectAll('circle')
