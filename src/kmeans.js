@@ -1,8 +1,11 @@
-import * as d3 from 'd3';
+import * as d3Color from 'd3-color';
+import * as d3Timer from 'd3-timer';
+
 import {
   updateIterationNumber,
   redrawCentroids,
   // redrawClusters,
+  clearD3PlotCentroids,
   drawQuantizedImage,
 } from './util';
 
@@ -14,13 +17,9 @@ import {
 // If not, repeatedly alternate between assigning colors & updating centroids
 // until convergence.
 
-// TODO: `Cluster` class, `Centroid` class
-// TODO: for visualization, plot a* on x-axis, b* on y-axis
-// TODO: what is d3-interpolate used for?
-
 class KMeans {
-  // color difference is determined by calculating Euclidean distance in
-  // three dimensions. For CIELAB, we find the color difference using
+  // color distance is determined by calculating Euclidean distance
+  // in 3d. For CIELAB, find the color difference using
   // the Delta E*ab CIE76 distance metric
   static getColorDifference(labColor1, labColor2) {
     const square = number => Math.pow(number, 2);
@@ -42,7 +41,7 @@ class KMeans {
   }
 
   // Initialization with the Forgy method. k observations are
-  // randomly chosen from the data set and used as initial means.
+  // randomly chosen from the data set and used as initial means
   // TODO: handle duplicates
   initialCentroids() {
     let initialCentroids = [];
@@ -56,19 +55,24 @@ class KMeans {
   }
 
   // alternate between assigning data points to clusters &
-  // updating & updating cluster centroids until convergence:
-  // when centroid assignments are equivalent
+  // updating cluster centroids until convergence.
+  // convergence occurs when centroid assignments are equivalent
   kMeansAlgorithm() {
-    this.runningKMeans = d3.interval(() => {
+    // debugger
+    if (this.cancelKMeans) {
+      clearD3PlotCentroids();
+      return;
+    }
+
+    this.runningKMeans = d3Timer.interval(() => {
       updateIterationNumber();
       this.clusters = this.calculateClusters();
-      // redrawClusters(this.clusters);
       this.centroids = this.recomputeCentroids();
       if (this.convergence) {
         this.runningKMeans.stop();
-        debugger
         drawQuantizedImage(this.clusters, this.centroids);
       }
+      // if passing 20 iter, this.runningKMeans.restart(cb, ...) so it goes faster!
     }, 800);
   }
 
@@ -102,11 +106,11 @@ class KMeans {
     return newClusters;
   }
 
+  // A cluster's centroid is the mean position of all the pixels in the cluster
   computeCentroid(cluster) {
     let newCentroid = Array.apply(null, Array(4)).map(() => 0);
 
-    // debugger
-    cluster.forEach((labColor) => {
+    cluster.forEach((labColor, i) => {
       newCentroid[0] += labColor.l;
       newCentroid[1] += labColor.a;
       newCentroid[2] += labColor.b;
@@ -114,13 +118,10 @@ class KMeans {
     });
 
     newCentroid = newCentroid.map(colorValue => colorValue / cluster.length);
-    if (isNaN(newCentroid[3])) {
-      debugger
-      console.log(newCentroid[3]);
-    }
-    return d3.lab(...newCentroid);
+    return d3Color.lab(...newCentroid);
   }
 
+  // TODO: less sig figs?
   isEqual(array1, array2) {
     return JSON.stringify(array1) === JSON.stringify(array2);
   }
@@ -129,13 +130,12 @@ class KMeans {
   recomputeCentroids() {
     let newCentroids = [];
     let isConverged = true;
-    // average for attribute for cluster === new centroid
-    // calculate mean for attribute for cluster
     this.clusters.forEach((cluster, i) => {
       let newCentroid = cluster.length
         ? this.computeCentroid(cluster)
         : this.centroids[i];
 
+      newCentroid.clusterLength = cluster.length;
       if (!this.isEqual(this.centroids[i], newCentroid)) {
         isConverged = false;
       }
@@ -150,6 +150,3 @@ class KMeans {
 }
 
 export default KMeans;
-
-// color quantization -> replace final clusters with their centroid
-// & append to new image data object, then write to canvas !

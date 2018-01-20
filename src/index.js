@@ -1,26 +1,20 @@
 import './scss/main.scss';
 
-// TODO: only use the required imports
-// https://github.com/d3/d3-tile/issues/39
-import * as d3 from 'd3';
+import * as d3 from 'd3-selection';
+import * as d3Color from 'd3-color';
 import KMeans from './kmeans';
-import { drawPixels, clearD3PlotCentroids } from './util';
+import Pixel from './pixel';
+import { clearD3PlotCentroids } from './util';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-
-// TODO: update k on change of input's value.
-// TODO: latch onto kmeans timer as a global var so we can clear if necessary?
-// let k = parseInt(d3.select('#k').attr('value'));
 
 let canvasImageData;
 let canvasImageRgb;
 let canvasImageLab;
 
 let kMeans;
-let drawPixelsTimer;
-
-// TODO: refactor into image.js
+let pixelAnimation;
 
 const inputK = d3.select('#k');
 let k = parseInt(inputK.attr('value'));
@@ -30,43 +24,45 @@ inputK.on('change', () => {
 
 const loadImage = path => {
   const img = new Image();
-  // TODO: use this with file upload:
-  // https://stackoverflow.com/questions/10906734/how-to-upload-image-into-html5-canvas
-  // TODO: or alternatively get Data URI of the image:
-  // https://stackoverflow.com/questions/4773966/drawing-an-image-from-a-data-url-to-a-canvas
-  // const url = window.URL.createObjectURL(path);
   img.src = path;
   img.crossOrigin = 'Anonymous';
   img.onload = () => {
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
-    canvasImageData = setImageData();
-    canvasImageRgb = getRgbColors();
-    canvasImageLab = getLabColors();
 
-    if (kMeans && kMeans.runningKMeans) kMeans.runningKMeans.stop();
-    if (drawPixelsTimer)  (drawPixelsTimer);
-    // debugger
-    clearD3PlotCentroids();
-
-    setTimeout(() => {
-      kMeans = new KMeans(canvasImageLab, k);
-      drawPixelsTimer = drawPixels(kMeans);
-    }, 500);
+    parseCanvasImage();
+    runKMeans();
   };
 };
 
-const setImageData = () => {
-  const canvasImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  return canvasImage.data;
+const cancelKMeans = () => {
+  if (kMeans && kMeans.runningKMeans) {
+    kMeans.runningKMeans.stop();
+  } else if (kMeans) {
+    kMeans.cancelKMeans = true;
+  }
 };
+
+const cancelPixelAnimation = () => {
+  if (pixelAnimation) pixelAnimation.cancelAnimation = true;
+};
+
+const startNewKMeansRun = () => {
+  kMeans = new KMeans(canvasImageLab, k);
+  pixelAnimation = new Pixel(kMeans);
+  pixelAnimation.drawPixels();
+};
+
+const getImageData = () => (
+  ctx.getImageData(0, 0, canvas.width, canvas.height).data
+);
 
 const getRgbColors = () => {
   let rgbValues = [];
   for (let i = 0; i < canvasImageData.length; i += 4) {
     rgbValues.push(
-      d3.rgb(
+      d3Color.rgb(
         ...canvasImageData.slice(i, i + 3),
         canvasImageData[i + 3] / 255
       )
@@ -77,7 +73,7 @@ const getRgbColors = () => {
 
 const getLabColors = () => (
   canvasImageRgb.map((rgbColor, i) => {
-    const labColor = d3.lab(rgbColor);
+    const labColor = d3Color.lab(rgbColor);
     labColor.pixelPosition = i;
     return labColor;
   })
@@ -97,14 +93,24 @@ for (var i = 1; i < 10; i++) {
     .append('label')
     .attr('for', `image-${i}`)
     .html(i);
-  // if (i === 10) {
-  //   input type=file, add a separate file handler... can I pass data URI in?
-  //   going to have to rescale / fit it to 300 somehow.
-  // }
 }
 
 const chooseImage = () => {
   loadImage(`public/assets/images/demos/${d3.event.target.value}.jpg`);
 };
 
-d3.selectAll('input[name=image-number]').on('change', chooseImage);
+d3.selectAll('input[name=image-number]')
+  .on('change', chooseImage);
+
+const parseCanvasImage = () => {
+  canvasImageData = getImageData();
+  canvasImageRgb = getRgbColors();
+  canvasImageLab = getLabColors();
+};
+
+const runKMeans = () => {
+  cancelKMeans();
+  cancelPixelAnimation();
+  clearD3PlotCentroids();
+  setTimeout(startNewKMeansRun, 500);
+};
