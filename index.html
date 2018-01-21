@@ -12,9 +12,7 @@
         <header class="title">
           kume
         </header>
-        <section class="blurb">
-          Visualizing dominant colors and image segmentation with<br /><a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank">k-means clustering</a>.
-        </section>
+
         <section class="counts">
           <div>
             <h2>NUMBER OF CLUSTERS <em>k =</em><input type="number" id="k" min="1" value="6" /></em></h2>
@@ -31,12 +29,12 @@
           </ul>
           <canvas id="canvas"></canvas>
         </section>
+        <section class="blurb">
+          Visualizing dominant colors and image segmentation with<br /><a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank">k-means clustering</a>.
+        </section>
         <div class="links">
-          <p>K-means groups the photo's pixels into <em>k</em> clusters.<br />The algorithm first makes a guess at the <em>k</em> dominant colors.<br />It then iteratively assigns pixels to clusters based on color distances and updates each cluster's average color.<br />When the clusters no longer update, the original image is redrawn with only <em>k</em> colors.</p>
-          <div>
-            Read more on <a href="https://github.com/agarun/kume">GitHub</a>
-            or <a href="https://agarun.com">contact the author</a>.
-          </div>
+          <p>K-means groups the photo's pixels into <em>k</em> clusters. The algorithm first makes a guess at the <em>k</em> dominant colors. It then iteratively assigns pixels to clusters based on color distances and updates each cluster's average color. When the clusters no longer update, the original image is redrawn with only <em>k</em> colors. Read more on <a href="https://github.com/agarun/kume">GitHub</a>
+          or <a href="https://agarun.com">contact the author</a>.</p>
         </div>
       </aside>
       <article>

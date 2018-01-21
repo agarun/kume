@@ -11,13 +11,14 @@ $light-gray: #e2e2e2;
 }
 
 aside {
-  margin: 60px 80px;
+  margin: 0 80px;
   max-width: 300px;
   font-family: 'Noto Sans', sans-serif;
   line-height: 1.5;
 
   .blurb {
-    font-size: 19px;
+    font-size: 20px;
+    text-align: center;
 
     a {
       color: $light-green;
@@ -27,7 +28,8 @@ aside {
   }
 
   .counts {
-    margin: 20px 0;
+    margin-top: 20px;
+    text-align: center;
 
     input {
       margin: 0;
@@ -162,7 +164,8 @@ aside {
 }
 
 header {
-  margin: 30px 0;
+  margin-top: 60px;
+  margin-bottom: 30px;
   font-size: 52px;
   font-weight: 600;
   font-family: 'EB Garamond', serif;
@@ -174,7 +177,8 @@ header {
 }
 
 .image {
-  margin: 40px auto;
+  margin: 20px auto;
+  margin-bottom: 40px;
   text-align: center;
 
   canvas {
@@ -249,18 +253,20 @@ article {
 }
 
 .links {
+  margin: 20px 0;
+  margin-left: -40px;
+  padding: 5px;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
+  width: 400px;
   font-family: 'EB Garamond', serif;
   color: #333;
-  font-size: 16px;
-
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 0.01em;
 
   p {
-    width: 400px;
     font-weight: 500;
 
     em {
@@ -270,13 +276,13 @@ article {
 
   a {
     margin-top: -10px;
+    font-weight: 700;
     text-decoration: none;
     color: $light-green;
-    font-weight: 700;
 
     &:hover {
-      color: $dark-green;
       text-decoration: underline;
+      color: $dark-green;
     }
   }
 }
