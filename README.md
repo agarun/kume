@@ -42,7 +42,7 @@ When there are no more new centroid assignments, the cluster data is used to dra
 
 ## References
 * K-means [1](http://www.marmakoide.org/download/teaching/dm/dm-kmeans.pdf), [2](https://www.slideshare.net/djempol/kmeans-initialization-15041920), [3](https://jpgdatascience.wordpress.com/2016/05/02/image-compression-k-means-clustering/), [4](http://www.onmyphd.com/?p=k-means.clustering), [5](https://www.naftaliharris.com/blog/visualizing-k-means-clustering/)
-* Color spaces [1](https://engineering.purdue.edu/~bouman/ece637/notes/pdf/ColorSpaces.pdf), [2](http://www.easyrgb.com/en/math.php), [3](http://hyperphysics.phy-astr.gsu.edu/hbase/vision/cie.html)
+* Color spaces [1](https://engineering.purdue.edu/~bouman/ece637/notes/pdf/ColorSpaces.pdf), [2](http://www.easyrgb.com/en/math.php), [3](http://hyperphysics.phy-astr.gsu.edu/hbase/vision/cie.html), [4](https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/05/subtleties-of-color-part-1-of-6/)
 * Image segmentation [1](https://www.youtube.com/watch?v=yR7k19YBqiw)
 * [Delta E*ab CIE76 color distance](https://en.wikipedia.org/wiki/Color_difference#CIELAB_Delta_E)
 * Canvas pixel manipulation [1](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas)
