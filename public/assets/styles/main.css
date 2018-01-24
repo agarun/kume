@@ -185,7 +185,7 @@ aside {
     color: #0a704f; }
 
 header {
-  margin-top: 60px;
+  margin-top: 50px;
   margin-bottom: 30px;
   font-size: 52px;
   font-weight: 600;
@@ -279,5 +279,20 @@ article {
     .links a:hover {
       text-decoration: underline;
       color: #075038; }
+
+.blurb-color {
+  margin-left: 12px;
+  position: absolute;
+  top: 716px;
+  width: 430px;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'EB Garamond', serif;
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  z-index: 999; }
+  .blurb-color em {
+    font-weight: 700; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhc3NldHMvc3R5bGVzL21haW4uY3NzIiwic291cmNlUm9vdCI6IiJ9*/

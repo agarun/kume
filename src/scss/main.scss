@@ -164,7 +164,7 @@ aside {
 }
 
 header {
-  margin-top: 60px;
+  margin-top: 50px;
   margin-bottom: 30px;
   font-size: 52px;
   font-weight: 600;
@@ -284,5 +284,23 @@ article {
       text-decoration: underline;
       color: $dark-green;
     }
+  }
+}
+
+.blurb-color {
+  margin-left: 12px;
+  position: absolute;
+  top: 716px;
+  width: 430px;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'EB Garamond', serif;
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  z-index: 999;
+
+  em {
+    font-weight: 700;
   }
 }
