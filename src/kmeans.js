@@ -39,12 +39,12 @@ class KMeans {
     this.centroids = this.initialCentroids();
     this.convergence = false;
     this.runningKMeans = null;
+    this.kMeansTransitionDuration = 750;
     this.kMeansRun = this.kMeansRun.bind(this);
   }
 
   // Initialization with the Forgy method. k observations are
   // randomly chosen from the data set and used as initial means
-  // TODO: handle duplicates
   initialCentroids() {
     let initialCentroids = [];
     while (initialCentroids.length !== this.k) {
@@ -77,11 +77,14 @@ class KMeans {
     this.runningKMeans = d3Timer.interval((elapsed) => {
       this.kMeansRun();
 
-      if (elapsed > 22 * 750) {
+      if (elapsed > 20 * this.kMeansTransitionDuration) {
+        this.kMeansTransitionDuration = 150;
         this.runningKMeans.stop();
-        this.runningKMeans = d3Timer.interval(this.kMeansRun, 200);
+        this.runningKMeans = (
+          d3Timer.interval(this.kMeansRun, this.kMeansTransitionDuration)
+        );
       }
-    }, 750);
+    }, this.kMeansTransitionDuration);
   }
 
   // Assign each color to the cluster centroid it's closest to based
@@ -150,7 +153,7 @@ class KMeans {
     });
 
     this.convergence = isConverged;
-    redrawCentroids(this.centroids);
+    redrawCentroids(this.centroids, this.kMeansTransitionDuration);
     return newCentroids;
   }
 }

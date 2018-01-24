@@ -73,12 +73,12 @@ export const drawInitialCentroids = (centroids) => {
     .attr('r', 10);
 };
 
-export const redrawCentroids = (centroids) => {
+export const redrawCentroids = (centroids, kMeansTransitionDuration) => {
   plotD3
     .selectAll('circle')
     .data(centroids)
     .transition()
-    .duration(1000)
+    .duration(kMeansTransitionDuration)
     .attr('cy', centroid => convertRangeA(centroid.a))
     .attr('cx', centroid => convertRangeB(centroid.b))
     .attr('fill', centroid => centroid);
