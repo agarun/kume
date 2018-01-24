@@ -132,10 +132,18 @@ const parseCanvasImage = () => {
   canvasImageLab = getLabColors();
 };
 
+const drawColorBlurb = () => {
+  d3.select('.blurb-color')
+    .transition()
+    .duration(500)
+    .style('opacity', 1);
+};
+
 const runKMeans = () => {
   cancelKMeans();
   cancelPixelAnimation();
   clearD3PlotCentroids();
+  drawColorBlurb();
   setTimeout(startNewKMeansRun, 500);
 };
 

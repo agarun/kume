@@ -12,7 +12,6 @@
         <header class="title">
           kume
         </header>
-
         <section class="counts">
           <div>
             <h2>NUMBER OF CLUSTERS <em>k =</em><input type="number" id="k" min="1" value="6" /></em></h2>
@@ -34,13 +33,17 @@
         </section>
         <div class="links">
           <p>K-means groups the photo's pixels into <em>k</em> clusters. The algorithm first makes a guess at the <em>k</em> dominant colors. It then iteratively assigns pixels to clusters based on color distances and updates each cluster's average color. When the clusters no longer update, the original image is redrawn with only <em>k</em> colors. Read more on <a href="https://github.com/agarun/kume">GitHub</a>
-          or <a href="https://agarun.com">contact the author</a>.</p>
+          or <a href="https://agarun.com">contact the author</a>.
+        </p>
         </div>
       </aside>
       <article>
         <section class="plot-container">
           <canvas id="plot"></canvas>
           <svg id="d3-plot"></svg>
+        </section>
+        <section class="blurb-color">
+          A plot of the image's pixels as RGB colors converted from the CIELAB color space. The x-axis denotes the red-green channel (<em>a*</em>) and the y-axis denotes the blue-yellow channel (<em>b*</em>). Each k-means update changes the clusters' mean colors if possible. Hover over a cluster's color to see more info about it.
         </section>
       </article>
     </div>
