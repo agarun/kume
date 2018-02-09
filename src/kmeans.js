@@ -4,7 +4,6 @@ import * as d3Timer from 'd3-timer';
 import {
   updateIterationNumber,
   redrawCentroids,
-  // redrawClusters, // TODO: voronoi
   clearD3PlotCentroids,
 } from './util';
 
