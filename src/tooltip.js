@@ -1,4 +1,5 @@
 import * as d3 from 'd3-selection';
+import * as d3Color from 'd3-color';
 import transition from 'd3-transition';
 
 const colorTooltip = (
@@ -34,7 +35,8 @@ export const colorTooltipMouseover = (centroid) => {
       `rgba${centroid.toString().slice(3, -1)}, 0.35)`
     );
 
-  const centroidRgb = centroid.toString().slice(4, -1).split(',');
+  const centroidD3Rgb = d3Color.rgb(centroid);
+  const centroidRgb = [centroidD3Rgb.r, centroidD3Rgb.g, centroidD3Rgb.b].map(Math.round);
   colorTooltip
     .style('visibility', 'visible')
     .style('left', d3.select(d3.event.target).attr('cy') + 'px')
